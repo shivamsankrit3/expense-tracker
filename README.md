@@ -2,7 +2,7 @@
 
 A web app to track daily expenses, categorize spending, and visualize where the money goes. Each user logs in with their own account, and their expenses are saved permanently in a cloud database — not just in one browser.
 
-**Live Demo:** [Add your GitHub Pages link here once deployed]
+**Live Demo:** https://shivamsankrit3.github.io/expense-tracker/
 
 ## Features
 
