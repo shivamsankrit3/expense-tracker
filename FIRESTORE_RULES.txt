@@ -1,0 +1,37 @@
+Firestore Security Rules — apply these before sharing your live link publicly
+
+Right now your database is in "test mode," which means ANYONE on the internet
+can read or write to it, not just logged-in users. This is fine while building,
+but should be locked down before you submit your resume link anywhere.
+
+HOW TO APPLY:
+1. Go to your Firebase Console → Firestore Database → click the "Rules" tab
+2. Delete everything in the box
+3. Paste in the rules below
+4. Click "Publish"
+
+------------------------------------------------------------
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /expenses/{expenseId} {
+      allow read, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
+------------------------------------------------------------
+
+WHAT THIS DOES (in plain terms):
+- "request.auth != null" means: only logged-in users can do anything at all.
+- For reading or deleting an expense, it checks that the userId stored on
+  that expense matches the ID of the person currently logged in — so nobody
+  can read or delete someone else's expenses, even if they tried to guess
+  a document ID.
+- For creating a new expense, it checks that the userId you're saving on the
+  new expense matches your own logged-in ID — so you can't create an expense
+  and tag it as belonging to someone else.
+
+This is a genuinely good thing to mention in an interview: it shows you understand
+that "test mode" is insecure by default, and that real apps need rules enforcing
+that users can only access their own data.
